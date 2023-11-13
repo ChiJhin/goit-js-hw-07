@@ -33,16 +33,21 @@ function onOpenModal(evt) {
   evt.preventDefault();
 
   const instance = basicLightbox.create(
-    `<img src="${evt.target.dataset.source}" width="800" height="600">`
-  );
-  listGallery.addEventListener(
-    "keydown",
-    (evt) => {
-      if (evt.code === "Escape") {
-        instance.close();
-      }
-    },
-    { once: true }
+    `<img src="${evt.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: () => {
+        listGallery.addEventListener("keydown", onEscBtnPress);
+      },
+      onClose: () => {
+        listGallery.removeEventListener("keydown", onEscBtnPress);
+      },
+    }
   );
   instance.show();
+
+  function onEscBtnPress(evt) {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+  }
 }
